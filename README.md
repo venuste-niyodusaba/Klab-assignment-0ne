@@ -1,5 +1,5 @@
-# kapee website for shopping women's and men's clothers and electronuc devices gadgets
-## untroduction
+# kapee website for shopping women's , men's clothers and electronic devices gadgets
+## introduction
 kappee is a website where you can make order and shopping goods in easy way  this website i developed by  NIYODUSABA VENUSTE
  as a software developer and wesite designer . has developer in react framework  typecscript as laguage and style is taliwind CSS
   this website have the conytains image  of products from our store so thi real store as like pysical store
