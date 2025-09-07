@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { FormEvent } from "react";
 
 function Contact() {
@@ -8,7 +8,7 @@ function Contact() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    
+
     console.log("Form submitted:", { name, email, message });
     alert("Thank you! Your message has been sent.");
     setName("");
@@ -22,7 +22,7 @@ function Contact() {
       <p className="text-gray-700 mb-6 text-center">
         Feel free to reach out to us through the form below.
       </p>
-      
+
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-80 bg-white shadow-md p-6 rounded"

@@ -22,7 +22,6 @@ import vrBack from "../assets/images/VirtualRealityback.jpg";
 
 function Home() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [message, setMessage] = useState("");
   const categories = [
     { name: "Men’s Clothing", sub: ["T-Shirts", "Shirts", "Jeans", "Jackets"] },
     { name: "Women’s Clothing", sub: ["Dresses", "Tops", "Skirts", "Shoes"] },
