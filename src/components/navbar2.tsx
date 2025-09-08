@@ -5,7 +5,7 @@ import { useCart } from "./CartContext";
 import Home2 from "../components/home2"
 import { Link } from "react-router-dom";
 
-function NavbarPage() {
+function NavbarPage2() {
   const [visible, setVisible] = useState(true);
   const { cart } = useCart();
 
@@ -146,4 +146,4 @@ function NavbarPage() {
   );
 }
 
-export default NavbarPage;
+export default NavbarPage2;

@@ -22,7 +22,7 @@ import controllerBack from "../assets/images/Controllerback.jpg";
 import vr from "../assets/images/VirtualRealityfront.jpg";
 import vrBack from "../assets/images/VirtualRealityback.jpg";
 
-function Home() {
+function Home2() {
   const { addToCart } = useCart();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -77,25 +77,25 @@ function Home() {
         <main className="w-full relative overflow-hidden pl-72 h-[30rem]">
           <div className="bg-gray-50 border shadow-md rounded flex items-center justify-between px-10 py-12 transition-all duration-700 ease-in-out min-h-[280px]">
             <div>
-              <p className="text-yellow-500 font-bold">{slides[current].subtitle}</p>
+              <p className="text-blue-500 font-bold">{slides[current].subtitle}</p>
               <h1 className="text-3xl font-extrabold mt-2">{slides[current].title}</h1>
               <p className="text-xl mt-2">{slides[current].desc}</p>
               <Link to="/shooping">
-                <button className="mt-6 bg-yellow-400 px-6 py-3 rounded text-white font-semibold">BUY NOW</button>
+                <button className="mt-6 bg-blue-500 px-6 py-3 rounded text-white font-semibold">BUY NOW</button>
               </Link>
             </div>
             <img src={slides[current].img} alt={slides[current].title} className="w-80 h-auto object-contain" />
           </div>
           <div className="flex justify-center mt-4 gap-2">
             {slides.map((_, i) => (
-              <span key={i} className={`w-3 h-3 rounded-full cursor-pointer ${i === current ? "bg-yellow-400" : "bg-gray-300"}`} onClick={() => setCurrent(i)}></span>
+              <span key={i} className={`w-3 h-3 rounded-full cursor-pointer ${i === current ? "bg-blue-500" : "bg-gray-300"}`} onClick={() => setCurrent(i)}></span>
             ))}
           </div>
-          <button onClick={prevSlide} className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-yellow-400 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg">‹</button>
-          <button onClick={nextSlide} className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-yellow-400 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg">›</button>
+          <button onClick={prevSlide} className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-blue-500 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg">‹</button>
+          <button onClick={nextSlide} className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-blue-500 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg">›</button>
         </main>
         <aside className="absolute top-0 left-0 w-64 bg-white shadow border rounded z-20">
-          <h2 className="bg-yellow-400 px-4 py-3 font-bold text-black flex justify-between items-center">SHOP BY CATEGORIES <span className="cursor-pointer">☰</span></h2>
+          <h2 className="bg-blue-500 px-4 py-3 font-bold text-black flex justify-between items-center">SHOP BY CATEGORIES <span className="cursor-pointer">☰</span></h2>
           <ul>
             {categories.map((cat, i) => (
               <li key={i} className="group relative px-4 py-3 border-b hover:bg-gray-100 cursor-pointer">
@@ -119,7 +119,7 @@ function Home() {
           <div className="relative border rounded p-4 flex flex-col items-center">
             <span className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">17% OFF</span>
             <img src={watch} alt="Apple Watch" className="w-48" />
-            <div className="bg-yellow-300 flex flex-row px-14 py-3 justify-between gap-12">
+            <div className="bg-blue-500 flex flex-row px-14 py-3 justify-between gap-12">
               <div className="relative group/cart" onClick={() => addToCart({ id: 2, title: "Apple Watch Series 5", price: 499 })}>
                 <ShoppingCart size={20} className="cursor-pointer hover:text-green-600" />
                 <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover/cart:scale-100 transition-transform bg-black text-white text-xs px-2 py-1">Add to Cart</span>
@@ -150,7 +150,7 @@ function Home() {
                 <div className="relative w-full h-40 bg-white flex items-center justify-center">
                   <img src={hoveredIndex === i && product.back ? product.back : product.front} alt={product.title} className="object-contain w-full h-full transition-all duration-500" />
                 </div>
-                <div className="bg-yellow-300 hidden group-hover:flex flex-row px-2 py-1 justify-between gap-10 transition-transform duration-300 hover:scale-105 rounded-lg shadow-md">
+                <div className="bg-blue-500 hidden group-hover:flex flex-row px-2 py-1 justify-between gap-10 transition-transform duration-300 hover:scale-105 rounded-lg shadow-md">
                   <div className="relative group/cart" onClick={() => addToCart(product)}>
                     <ShoppingCart size={20} className="cursor-pointer hover:text-green-600" />
                     <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover/cart:scale-100 transition-transform bg-black text-white text-xs px-2 py-1 rounded">Add to Cart</span>
@@ -193,9 +193,9 @@ function Home() {
               <h3 className="font-semibold text-sm truncate">{product.title}</h3>
               <p className="mt-1"><span className="text-red-500 font-bold">{product.price}</span> {product.oldPrice && <span className="text-gray-400 line-through">{product.oldPrice}</span>}</p>
               <div className="flex justify-between gap-2 mt-3 w-full">
-                <button className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center"><Shuffle size={16} /></button>
-                <button onClick={() => addToCart(product)} className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center"><ShoppingCart size={16} /></button>
-                <button className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center"><Eye size={16} /></button>
+                <button className="flex-1 bg-blue-500 hover:bg-blue-500 text-black p-2 rounded flex justify-center"><Shuffle size={16} /></button>
+                <button onClick={() => addToCart(product)} className="flex-1 bg-blue-500 hover:bg-blue-500 text-black p-2 rounded flex justify-center"><ShoppingCart size={16} /></button>
+                <button className="flex-1 bg-blue-500 hover:bg-blue-500 text-black p-2 rounded flex justify-center"><Eye size={16} /></button>
               </div>
             </div>
           ))}
@@ -205,4 +205,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Home2;
