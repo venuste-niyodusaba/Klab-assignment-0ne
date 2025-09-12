@@ -120,7 +120,7 @@ function Home2() {
             <span className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded">17% OFF</span>
             <img src={watch} alt="Apple Watch" className="w-48" />
             <div className="bg-blue-500 flex flex-row px-14 py-3 justify-between gap-12">
-              <div className="relative group/cart" onClick={() => addToCart({ id: 2, title: "Apple Watch Series 5", price: 499 })}>
+              <div className="relative group/cart" onClick={() => addToCart({ id: 2 })}>
                 <ShoppingCart size={20} className="cursor-pointer hover:text-green-600" />
                 <span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover/cart:scale-100 transition-transform bg-black text-white text-xs px-2 py-1">Add to Cart</span>
               </div>

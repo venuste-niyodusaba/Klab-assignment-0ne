@@ -1,22 +1,33 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useState } from "react";
-import { Search, Heart, ShoppingCart, User, Import } from "lucide-react";
+import {
+  Search,
+  Heart,
+  ShoppingCart,
+  User,
+  Copy,
+  FolderOpen,
+  Mail,
+  Menu,
+  X,
+} from "lucide-react";
 import { useCart } from "./CartContext";
-import Home2 from "../components/home2"
-import { Link } from "react-router-dom";
+
 
 function NavbarPage() {
   const [visible, setVisible] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { cart } = useCart();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="w-full z-50 relative">
+      {/* Promo Bar */}
       {visible && (
-        <div className="bg-black text-white w-full flex justify-center items-center px-6 py-4 text-sm relative">
+        <div className="bg-black text-white w-full flex justify-center items-center px-6 py-2 text-sm relative">
           <p>SUMMER SALE, Get 40% Off for all products.</p>
-          <button className="ml-4 bg-yellow-400 text-white px-3 py-1 font-semibold rounded">
+          <button className="ml-4 bg-yellow-400 text-black px-3 py-1 font-semibold rounded">
             Click Here
           </button>
           <button
@@ -27,121 +38,119 @@ function NavbarPage() {
           </button>
         </div>
       )}
-      <div className="bg-yellow-400 w-full flex justify-between items-center px-6 py-2 text-sm text-black">
+
+      {/* Top Info Bar */}
+      <div className="bg-yellow-400 hidden md:flex justify-between items-center px-6 py-2 text-sm text-black">
         <div className="flex gap-6">
-          <select className="bg-yellow-400">
+          <select className="bg-yellow-400 outline-none">
             <option>ENGLISH</option>
             <option>US</option>
           </select>
-          <select className="bg-yellow-400">
+          <select className="bg-yellow-400 outline-none">
             <option>$ DOLLAR (US)</option>
             <option>FR Rwandan</option>
           </select>
         </div>
         <div className="flex gap-6">
           <span>WELCOME TO OUR STORE!</span>
-          <NavLink to="/blog">BLOG</NavLink>
-          <NavLink to="/faq">FAQ</NavLink>
-          <NavLink to="/contact">CONTACT US</NavLink>
+          <NavLink to="/blog" className="flex items-center gap-1">
+            <FolderOpen size={12} /> BLOG
+          </NavLink>
+          <NavLink to="/faq" className="flex items-center gap-1">
+            <Copy size={12} /> FAQ
+          </NavLink>
+          <NavLink to="/contact" className="flex items-center gap-1">
+            <Mail size={12} /> CONTACT US
+          </NavLink>
         </div>
       </div>
-      <div className="w-full border-b flex justify-between items-center px-6 py-4">
-       <Link to ="Home2"> <h1 className="text-3xl font-bold text-gray-800">kapee.</h1></Link>
-        <div className="flex items-center w-1/2">
+
+      {/* Main Navbar */}
+      <div className="w-full flex justify-between items-center px-6 py-3 bg-yellow-400">
+        {/* Logo */}
+        <Link to="/">
+          
+        </Link>
+
+        {/* Icons */}
+        <div className="hidden md:flex items-center gap-6 text-black">
+          <Link to="/account">
+            <User size={22} />
+          </Link>
+          <Link to="/wishlist" className="relative">
+            <Heart size={22} />
+            <span className="absolute -top-2 -right-2 bg-white text-xs text-yellow-600 font-bold rounded-full px-1">
+              0
+            </span>
+          </Link>
+          <Link to="/cart" className="relative">
+            <ShoppingCart size={22} />
+            <span className="absolute -top-2 -right-2 bg-white text-xs text-yellow-600 font-bold rounded-full px-1">
+              {totalItems}
+            </span>
+          </Link>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      {/* Search Bar (Always Visible) */}
+      <div className="bg-white px-6 py-2 border-b">
+        <div className="flex items-center w-full max-w-4xl mx-auto">
           <input
             type="text"
             placeholder="Search for products, categories, brands, sku..."
-            className="flex-1 border h-12 w-10 focus:outline-none"
+            className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none"
           />
-          <select className="border px-2 py-3">
-            <option>All Categories</option>
-            <option>Accessories</option>
-            <option>Bags and Backpacks</option>
-            <option>Men</option>
-            <option>Shoes</option>
-            <option>Women</option>
-          </select>
-          <button className="bg-black px-4 py-3 rounded-r-md flex items-center justify-center hover:bg-yellow-400">
-            <Search className="h-7 w-7 text-yellow-300" />
+          <button className="bg-yellow-400 px-4 py-2 rounded-r-md text-black font-bold">
+            <Search />
           </button>
         </div>
-        <div className="flex items-center gap-6 text-sm">
-          <User size={32} color="#fbe704" strokeWidth={2.75} />
-          <span>
-            HELLO,{" "}
-            <NavLink to="/login" className="font-bold">
-              SIGN IN
-            </NavLink>
-          </span>
-          <span>
-            <Heart size={16} className="hover:text-yellow-300" /> 0
-          </span>
-          <span>
-            <ShoppingCart size={16} /> {totalItems}
-          </span>
-        </div>
       </div>
-      <div className="w-full border-b bg-white flex items-center px-6 relative z-50">
-        <div className="flex items-center gap-10 px-6 py-3 font-semibold text-sm flex-1 relative">
+
+      {/* Desktop Links */}
+      <div className="hidden md:flex w-full border-b bg-white px-6">
+        <div className="flex items-center gap-10 px-6 py-3 font-semibold text-sm">
           <NavLink to="/">HOME</NavLink>
-          <div className="relative group">
-            <NavLink to="/shop">SHOP ⌄</NavLink>
-            <div className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg border mt-2 rounded w-40 z-50">
-              <NavLink to="/shop/men" className="block px-4 py-2 hover:bg-gray-100">
-                Men
-              </NavLink>
-              <NavLink to="/shop/women" className="block px-4 py-2 hover:bg-gray-100">
-                Women
-              </NavLink>
-              <NavLink
-                to="/shop/accessories"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Accessories
-              </NavLink>
-            </div>
-          </div>
-          <div className="relative group">
-            <NavLink to="/pages">PAGES ⌄</NavLink>
-            <div className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg border mt-2 rounded w-40 z-50">
-              <NavLink to="/about" className="block px-4 py-2 hover:bg-gray-100">
-                About Us
-              </NavLink>
-              <NavLink to="/services" className="block px-4 py-2 hover:bg-gray-100">
-                Services
-              </NavLink>
-              <NavLink to="/contact" className="block px-4 py-2 hover:bg-gray-100">
-                Contact
-              </NavLink>
-            </div>
-          </div>
+          <NavLink to="/shop">SHOP</NavLink>
+          <NavLink to="/pages">PAGES</NavLink>
           <NavLink to="/blog">BLOG</NavLink>
-          <div className="relative group">
-            <NavLink to="/elements">ELEMENTS ⌄</NavLink>
-            <div className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg border mt-2 rounded w-40 z-50">
-              <NavLink
-                to="/elements/buttons"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Buttons
-              </NavLink>
-              <NavLink
-                to="/elements/forms"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Forms
-              </NavLink>
-              <NavLink
-                to="/elements/cards"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Cards
-              </NavLink>
-            </div>
-          </div>
+          <NavLink to="/elements">ELEMENTS</NavLink>
           <NavLink to="/buy">BUY NOW</NavLink>
         </div>
       </div>
+
+      {/* Mobile Menu Drawer */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t shadow-lg">
+          <ul className="flex flex-col p-4 gap-4 font-semibold text-sm">
+            <NavLink to="/" onClick={() => setMobileOpen(false)}>
+              HOME
+            </NavLink>
+            <NavLink to="/shop" onClick={() => setMobileOpen(false)}>
+              SHOP
+            </NavLink>
+            <NavLink to="/pages" onClick={() => setMobileOpen(false)}>
+              PAGES
+            </NavLink>
+            <NavLink to="/blog" onClick={() => setMobileOpen(false)}>
+              BLOG
+            </NavLink>
+            <NavLink to="/elements" onClick={() => setMobileOpen(false)}>
+              ELEMENTS
+            </NavLink>
+            <NavLink to="/buy" onClick={() => setMobileOpen(false)}>
+              BUY NOW
+            </NavLink>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
