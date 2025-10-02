@@ -62,7 +62,7 @@ export default function Dashboard() {
     }
 
     try {
-      const res = await axios.get<DashboardData>("http://localhost:5175/api/dashboard", {
+      const res = await axios.get<DashboardData>("https://kappee-backend-repo-11.onrender.com/api/dashboard", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setData(res.data);
@@ -78,11 +78,11 @@ export default function Dashboard() {
         }
         try {
           const tokenRes = await axios.post<{ token: string }>(
-            "http://localhost:5175/api/auth/refresh-token",
+            "https://kappee-backend-repo-11.onrender.com/api/auth/refresh-token",
             { token: refreshToken }
           );
           localStorage.setItem("token", tokenRes.data.token);
-          const retryRes = await axios.get<DashboardData>("http://localhost:5175/api/dashboard", {
+          const retryRes = await axios.get<DashboardData>("https://kappee-backend-repo-11.onrender.com/api/dashboard", {
             headers: { Authorization: `Bearer ${tokenRes.data.token}` },
           });
           setData(retryRes.data);
