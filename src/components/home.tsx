@@ -1,196 +1,124 @@
 import { useState, useEffect } from "react";
-import { Heart, ShoppingCart, Eye, Shuffle } from "lucide-react";
+import axios from "axios";
+import { ShoppingCart, Heart, Shuffle, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useCart } from "../components/CartContext";
+import { useCart } from "./CartContext";
 
-// ✅ Images
-import phone from "../assets/images/phone.png";
-import slider2 from "../assets/images/slider2.png";
-import banner3 from "../assets/images/banner3.jpg";
-import banner4 from "../assets/images/banner4.jpg";
-import watch from "../assets/images/watch.jpg";
-import watchBack from "../assets/images/watchback.jpg";
-import iphone from "../assets/images/iphone.jpg";
-import iphoneBack from "../assets/images/iphoneback.jpg";
-import jblFront from "../assets/images/jblFront.jpg";
-import jblBack from "../assets/images/jblback.jpg";
-import airpods from "../assets/images/AirPodsfront.jpg";
-import airpodsBack from "../assets/images/AirPodsback.jpg";
-import camera from "../assets/images/camerafront.jpg";
-import cameraBack from "../assets/images/cameraback.jpg";
-import controller from "../assets/images/Controllerfront.jpg";
-import controllerBack from "../assets/images/Controllerback.jpg";
-import vr from "../assets/images/VirtualRealityfront.jpg";
-import vrBack from "../assets/images/VirtualRealityback.jpg";
+// Images
+import phoneImg from "../assets/images/banner4.jpg";
+import slider2Img from "../assets/images/Bags-150x150.png";
+import banner4Img from "../assets/images/Shoes-150x150.jpg";
+import banner5Img from "../assets/images/banner3.jpg";
+import banner2Img from "../assets/images/Controllerfront.jpg";
+import banner1Img from "../assets/images/JBL-Wireless-Bluetooth-Speaker-2-300x350.jpg";
+
+interface Product {
+  _id: string;
+  name: string;
+  category: { _id: string; name: string } | null;
+  price: number;
+  oldPrice?: number;
+  images: string[];
+  stock: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string;
+  desc: string;
+  img: string;
+}
+
+interface Category {
+  name: string;
+  sub?: string[];
+}
 
 function Home() {
   const { addToCart } = useCart();
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // ✅ Categories
-  const categories = [
-    { name: "Men’s Clothing", sub: ["T-Shirts", "Shirts", "Jeans", "Jackets"] },
-    { name: "Women’s Clothing", sub: ["Dresses", "Tops", "Skirts", "Shoes"] },
+  const categories: Category[] = [
+    { name: "Men's Clothing", sub: ["T-Shirts", "Shirts", "Jeans", "Jackets"] },
+    { name: "Women's Clothing", sub: ["Dresses", "Tops", "Skirts", "Shoes"] },
     { name: "Accessories", sub: ["Bags", "Watches", "Sunglasses"] },
     { name: "Shoes" },
     { name: "Jewellery", sub: ["Rings", "Necklaces", "Bracelets"] },
-    { name: "Bags & Backpacks" },
+    { name: "Bags & Backpacks", sub: ["Side Bag", "Back Bags"] },
     { name: "Watches" },
-    { name: "Dresses" },
-    { name: "Shirts" },
+    { name: "Electronics" },
+    { name: "Home & Garden" },
   ];
 
-  // ✅ Slides
-  const slides = [
-    { id: 1, title: "WIRELESS CHARGER STAND", subtitle: "BEST SMARTPHONE", desc: "Up To 70% Off", img: phone },
-    { id: 2, title: "PERSONALIZED HEADPHONES", subtitle: "BEATS EP ON-EAR", desc: "Min 40-80% Off", img: slider2 },
-    { id: 3, title: "WIRELESS SPEAKER", subtitle: "DIGITAL SMART", desc: "Min 30-75% Off", img: banner3 },
-    { id: 4, title: "WATCH CHARGER", subtitle: "DIGITAL SMART", desc: "Up To 70% Off", img: banner4 },
+  const slides: Slide[] = [
+    { id: 1, title: "WIRELESS CHARGING STAND", subtitle: "BEST SMARTPHONE", desc: "Up To 70% Off", img: phoneImg }, 
+    { id: 2, title: "DIGITAL SMARTWATCH", subtitle: "TRENDY & STYLISH", desc: "Limited Time Offer", img: banner5Img },
+    { id: 3, title: "HOME DECOR COLLECTION", subtitle: "BEAUTIFY YOUR HOME", desc: "Sale Up To 50% Off", img: slider2Img },
   ];
 
-  // ✅ Products
-  const products = [
-    { id: 1, title: "Apple iPhone", category: "ELECTRONICS", price: "$199.00", oldPrice: "$254.00", front: iphone, back: iphoneBack, tags: ["recent", "sale"] },
-    { id: 2, title: "Apple Watch Series 5", category: "ELECTRONICS", price: "$499.00", oldPrice: "$599.00", front: watch, back: watchBack, badge: "17% OFF", tags: ["featured", "sale", "recent"] },
-    { id: 3, title: "JBL Wireless Speaker", category: "ELECTRONICS", price: "$96.00", front: jblFront, back: jblBack, badge: "FEATURED", tags: ["featured"] },
-    { id: 4, title: "AirPods", category: "ELECTRONICS", price: "$149.00", front: airpods, back: airpodsBack, badge: "FEATURED", tags: ["featured", "recent"] },
-    { id: 5, title: "Digital Camera", category: "ELECTRONICS", price: "$299.00", oldPrice: "$399.00", front: camera, back: cameraBack, tags: ["sale"] },
-    { id: 6, title: "Game Controller", category: "ELECTRONICS", price: "$89.00", front: controller, back: controllerBack, tags: ["topRated"] },
-    { id: 7, title: "Virtual Reality Headset", category: "ELECTRONICS", price: "$249.00", front: vr, back: vrBack, tags: ["topRated"] },
-  ];
-
-  // ✅ Filters
-  const featuredProducts = products.filter((p) => p.tags.includes("featured"));
-  const saleProducts = products.filter((p) => p.tags.includes("sale"));
-  const topRatedProducts = products.filter((p) => p.tags.includes("topRated"));
-
-  // ✅ Auto-slide effect
+  // Auto slide
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000);
+    const interval = setInterval(() => setCurrentSlide((prev) => (prev + 1) % slides.length), 5000);
     return () => clearInterval(interval);
+  }, [slides.length]);
+
+  // Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get<Product[]>("http://localhost:5175/api/products");
+        setProducts(res.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  // ✅ Reusable Product Card
-  const ProductCard = ({ product }: { product: any }) => (
-    <div
-      key={product.id}
-      className="relative border rounded shadow-md bg-white p-4 flex flex-col items-center text-center transition-transform duration-300 hover:scale-105"
-      onMouseEnter={() => setHoveredId(product.id)}
-      onMouseLeave={() => setHoveredId(null)}
-    >
-      {product.badge && (
-        <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded">
-          {product.badge}
-        </span>
-      )}
-      <button className="absolute top-2 right-2 text-gray-500 hover:text-red-500">
-        <Heart size={16} />
-      </button>
-
-      <div className="relative w-full h-40 flex items-center justify-center">
-        <img
-          src={hoveredId === product.id && product.back ? product.back : product.front}
-          alt={product.title}
-          className="object-contain max-h-full transition-all duration-500"
-        />
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-yellow-400"></div>
       </div>
+    );
+  }
 
-      <p className="text-xs text-gray-500 mt-2">{product.category}</p>
-      <h3 className="font-semibold text-sm truncate">{product.title}</h3>
-      <p className="mt-1">
-        <span className="text-red-500 font-bold">{product.price}</span>{" "}
-        {product.oldPrice && <span className="text-gray-400 line-through">{product.oldPrice}</span>}
-      </p>
-
-      <div className="flex justify-between gap-2 mt-3 w-full">
-        <button className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center">
-          <Shuffle size={16} />
-        </button>
-        <button
-          onClick={() => addToCart(product)}
-          className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center"
-        >
-          <ShoppingCart size={16} />
-        </button>
-        <button className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded flex justify-center">
-          <Eye size={16} />
-        </button>
-      </div>
-    </div>
-  );
-
-  // ✅ Reusable Product Section
-  const ProductSection = ({ title, products }: { title: string; products: any[] }) => (
-    <div className="border shadow rounded p-4">
-      <div className="flex justify-between items-center border-b pb-2 mb-4">
-        <h2 className="text-lg font-bold">{title}</h2>
-        <button className="text-sm font-semibold px-4 py-1 bg-black text-white rounded">VIEW ALL</button>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
-  );
+  const featuredProducts = products.filter((p) => p.isActive);
+  const hotDealsProducts = products.filter((p) => p.oldPrice && p.price < p.oldPrice);
+  const bestSellingProducts = products.filter((p) => p.stock > 50);
 
   return (
-    <div className="px-6 py-8 space-y-10">
-      {/* ✅ Hero + Sidebar */}
-      <div className="relative">
-        <main className="w-full relative overflow-hidden lg:pl-72 h-[30rem]">
-          <div className="bg-gray-50 border shadow-md rounded flex items-center justify-between px-10 py-12 min-h-[280px] transition-all duration-700 ease-in-out">
-            <div>
-              <p className="text-yellow-500 font-bold">{slides[currentSlide].subtitle}</p>
-              <h1 className="text-3xl font-extrabold mt-2">{slides[currentSlide].title}</h1>
-              <p className="text-xl mt-2">{slides[currentSlide].desc}</p>
-              <Link to="/shopping">
-                <button className="mt-6 bg-yellow-400 px-6 py-3 rounded text-white font-semibold">BUY NOW</button>
-              </Link>
-            </div>
-            <img src={slides[currentSlide].img} alt={slides[currentSlide].title} className="w-80 h-auto object-contain" />
-          </div>
-          {/* Dots */}
-          <div className="flex justify-center mt-4 gap-2">
-            {slides.map((_, i) => (
-              <span
-                key={i}
-                className={`w-3 h-3 rounded-full cursor-pointer ${i === currentSlide ? "bg-yellow-400" : "bg-gray-300"}`}
-                onClick={() => setCurrentSlide(i)}
-              ></span>
-            ))}
-          </div>
-          {/* Arrows */}
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-yellow-400 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg"
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-100 hover:bg-yellow-400 text-black text-2xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg"
-          >
-            ›
-          </button>
-        </main>
-
-        {/* ✅ Sidebar */}
-        <aside className="absolute top-0 left-0 w-64 bg-white shadow border rounded z-20 hidden lg:block">
+    <div className="min-h-screen bg-white">
+      {/* HERO SECTION */}
+      <div className="container mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+        {/* Sidebar (desktop) */}
+        <aside className="hidden md:block w-64 bg-white shadow border rounded">
           <h2 className="bg-yellow-400 px-4 py-3 font-bold text-black flex justify-between items-center">
-            SHOP BY CATEGORIES <span className="cursor-pointer">☰</span>
+            SHOP BY CATEGORIES
           </h2>
           <ul>
             {categories.map((cat, i) => (
-              <li key={i} className="group relative px-4 py-3 border-b hover:bg-gray-100 cursor-pointer">
+              <li
+                key={i}
+                className="group relative px-4 py-3 border-b hover:bg-gray-100 cursor-pointer"
+              >
                 {cat.name}
                 {cat.sub && (
-                  <ul className="absolute left-full top-0 hidden group-hover:block bg-white shadow-lg border rounded w-48">
+                  <ul className="absolute left-full top-0 hidden group-hover:block bg-gray-100 shadow-lg border rounded w-48">
                     {cat.sub.map((sub, j) => (
-                      <li key={j} className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">{sub}</li>
+                      <li key={j} className="px-4 py-2 hover:bg-yellow-400 cursor-pointer text-sm">
+                        {sub}
+                      </li>
                     ))}
                   </ul>
                 )}
@@ -198,12 +126,242 @@ function Home() {
             ))}
           </ul>
         </aside>
+
+        {/* Hamburger Menu (mobile) */}
+        <div className="md:hidden mb-4">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex items-center bg-yellow-400 text-white px-4 py-2 rounded font-semibold"
+          >
+            {isMenuOpen ? <X size={20} className="mr-2" /> : <Menu size={20} className="mr-2" />}
+            Categories
+          </button>
+          {isMenuOpen && (
+            <div className="mt-2 bg-white border rounded shadow-lg">
+              <ul>
+                {categories.map((cat, i) => (
+                  <li
+                    key={i}
+                    className="px-4 py-3 border-b hover:bg-gray-100 cursor-pointer"
+                  >
+                    {cat.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Main Slider */}
+        <div className="flex-1 bg-gray-50 border shadow-md rounded flex flex-col md:flex-row items-center justify-between px-6 md:px-10 py-6 md:py-12">
+          <div className="text-center md:text-left">
+            <p className="text-yellow-400 font-bold">{slides[currentSlide].subtitle}</p>
+            <h1 className="text-2xl md:text-3xl font-extrabold mt-2">{slides[currentSlide].title}</h1>
+            <p className="text-lg md:text-xl mt-2">{slides[currentSlide].desc}</p>
+            <Link to="/shopping">
+              <button className="mt-4 md:mt-6 bg-yellow-400 px-4 md:px-6 py-2 md:py-3 rounded text-white font-semibold">
+                BUY NOW
+              </button>
+            </Link>
+          </div>
+          <img
+            src={slides[currentSlide].img}
+            alt={slides[currentSlide].title}
+            className="w-48 md:w-80 h-auto object-contain mt-4 md:mt-0"
+          />
+        </div>
       </div>
 
-      {/* ✅ Sections */}
-      <ProductSection title="Featured Products" products={featuredProducts} />
-      <ProductSection title="Best Selling Products" products={topRatedProducts} />
-      <ProductSection title="On Sale" products={saleProducts} />
+      {/* MINI PROMO BANNERS */}
+      <div className="container mx-auto px-4 py-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <PromoBanner title="WIRELESS SPEAKER" subtitle="DIGITAL SMART" desc="Min 30-75% Off" img={banner1Img} />
+        <PromoBanner title="MENS HOT DEAL" subtitle="TIMBER LAND" desc="Up To 70% Off" img={banner4Img} />
+        <PromoBanner title="GAMING HEADSET" subtitle="TRENDY TECH" desc="Flat 50% Off" img={banner2Img} />
+      </div>
+
+      {/* HOT DEALS */}
+      <div className="container mx-auto px-4 py-6">
+        <SectionTitle title="HOT DEALS" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 px-2 sm:px-5 py-10 border border-cyan-300">
+          {hotDealsProducts.slice(0, 4).map((product) => (
+            <HotDealCard key={product._id} product={product} addToCart={addToCart} />
+          ))}
+        </div>
+      </div>
+
+      {/* FEATURED PRODUCTS */}
+      <div className="container mx-auto px-4 py-6">
+        <SectionTitle title="FEATURED PRODUCTS" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {featuredProducts.slice(0, 8).map((p, i) => (
+            <CompactProductCard
+              key={p._id}
+              product={p}
+              addToCart={addToCart}
+              hoveredIndex={hoveredIndex}
+              setHoveredIndex={setHoveredIndex}
+              index={i}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* BEST SELLING PRODUCTS */}
+      {bestSellingProducts.length > 0 && (
+        <div className="container mx-auto px-4 py-6">
+          <SectionTitle title="BEST SELLING PRODUCTS" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {bestSellingProducts.slice(0, 8).map((p, i) => (
+              <CompactProductCard
+                key={p._id}
+                product={p}
+                addToCart={addToCart}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------- Reusable Components ------------------------- */
+
+function PromoBanner({ title, subtitle, desc, img }: { title: string; subtitle: string; desc: string; img: string }) {
+  return (
+    <div className="bg-white shadow p-6 flex items-center justify-between rounded">
+      <div>
+        <p className="text-yellow-400 font-bold">{subtitle}</p>
+        <h3 className="text-lg font-bold">{title}</h3>
+        <p className="text-gray-600">{desc}</p>
+        <button className="mt-3 bg-yellow-400 text-white px-4 py-2 rounded">SHOP NOW</button>
+      </div>
+      <img src={img} alt={title} className="w-24 sm:w-32 h-24 sm:h-32 object-contain" />
+    </div>
+  );
+}
+
+function SectionTitle({ title }: { title: string }) {
+  return (
+    <div className="flex items-center justify-between mb-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
+      <button className="bg-gray-800 text-white px-3 sm:px-4 py-1 sm:py-2 rounded text-sm font-bold hover:bg-gray-700">
+        VIEW ALL
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------- Cards ------------------------- */
+function HotDealCard({ product, addToCart }: any) {
+  const discount =
+    product.oldPrice && product.price < product.oldPrice
+      ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
+      : null;
+
+  const [timeLeft, setTimeLeft] = useState({ days: 5, hrs: 12, mins: 30, secs: 45 });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        let { days, hrs, mins, secs } = prev;
+        if (secs > 0) secs--;
+        else if (mins > 0) {
+          secs = 59;
+          mins--;
+        } else if (hrs > 0) {
+          mins = 59;
+          hrs--;
+        } else if (days > 0) {
+          hrs = 23;
+          mins = 59;
+          secs = 59;
+          days--;
+        }
+        return { days, hrs, mins, secs };
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative bg-white border rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+      {discount && (
+        <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
+          {discount}% OFF
+        </span>
+      )}
+      <div className="bg-gray-50 h-40 flex items-center justify-center p-3 overflow-hidden">
+        <img src={product.images?.[0] || "/images/placeholder.png"} alt={product.name} className="w-full h-full object-contain" />
+      </div>
+      <div className="p-3">
+        <p className="text-xs text-gray-500 uppercase">{product.category?.name || "ELECTRONICS"}</p>
+        <h3 className="text-sm font-semibold leading-snug mb-2 line-clamp-2">{product.name}</h3>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-base font-bold text-red-600">${product.price}</span>
+          {product.oldPrice && <span className="text-xs text-gray-400 line-through">${product.oldPrice}</span>}
+        </div>
+        <div className="flex justify-between text-xs font-semibold text-yellow-600 mb-2">
+          <span>{timeLeft.days}d</span>
+          <span>{timeLeft.hrs}h</span>
+          <span>{timeLeft.mins}m</span>
+          <span>{timeLeft.secs}s</span>
+        </div>
+        <button
+          onClick={() =>
+            addToCart({ id: product._id, name: product.name, price: product.price, image: product.images?.[0] || "" })
+          }
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-white py-2 rounded font-semibold text-sm"
+        >
+          SELECT OPTIONS
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CompactProductCard({ product, addToCart, index, setHoveredIndex }: any) {
+  return (
+    <div
+      className="bg-white border rounded-lg shadow-sm hover:shadow-lg transition-all duration-200 relative group"
+      onMouseEnter={() => setHoveredIndex(index)}
+      onMouseLeave={() => setHoveredIndex(null)}
+    >
+      <div className="bg-gray-50 h-40 flex items-center justify-center p-3 relative overflow-hidden rounded-t-lg">
+        <img
+          src={product.images?.[0] || "/images/placeholder.png"}
+          alt={product.name}
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+        />
+      </div>
+      <div className="p-3 flex flex-col">
+        <p className="text-xs text-gray-500 uppercase mb-1 tracking-wide">{product.category?.name || "CATEGORY"}</p>
+        <h3 className="text-sm font-semibold leading-snug mb-2 line-clamp-2">{product.name}</h3>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-base font-bold text-red-600">{product.price} Frw</span>
+          {product.oldPrice && <span className="text-xs text-gray-400 line-through">{product.oldPrice} Frw</span>}
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({ id: product._id, name: product.name, price: product.price, image: product.images?.[0] || "" });
+            }}
+            className="flex-1 flex items-center justify-center bg-gray-100 hover:bg-yellow-400 transition-colors rounded-md p-2"
+          >
+            <ShoppingCart size={18} className="text-black" />
+          </button>
+          <button className="flex-1 flex items-center justify-center bg-gray-100 hover:bg-yellow-400 transition-colors rounded-md p-2">
+            <Shuffle size={18} className="text-black" />
+          </button>
+          <button className="flex-1 flex items-center justify-center bg-gray-100 hover:bg-yellow-400 transition-colors rounded-md p-2">
+            <Heart size={18} className="text-black" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

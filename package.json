@@ -9,13 +9,18 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
- "dependencies": {
-  "lucide-react": "^0.542.0",
-  "react": "^18.3.1",
-  "react-dom": "^18.3.1",
-  "react-router-dom": "^7.8.2"
-},
-
+  "dependencies": {
+    "axios": "^1.12.2",
+    "chart.js": "^4.5.0",
+    "chartjs-plugin-annotation": "^3.1.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "lucide-react": "^0.542.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.62.0",
+    "react-router-dom": "^7.8.2"
+  },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@types/react": "^19.1.10",
