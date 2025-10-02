@@ -40,8 +40,8 @@ export function Product() {
     try {
       const [productsRes, categoriesRes]: [AxiosResponse<ProductType[]>, AxiosResponse<CategoryType[]>] = 
         await Promise.all([
-          axios.get<ProductType[]>("https://kappee-backend-repo-11.onrender.com/api/products", { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get<CategoryType[]>("https://kappee-backend-repo-11.onrender.com/api/categories", { headers: { Authorization: `Bearer ${token}` } })
+          axios.get<ProductType[]>("https://kappee-backend-repo-10.onrender.com/api/products", { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get<CategoryType[]>("https://kappee-backend-repo-10.onrender.com/api/categories", { headers: { Authorization: `Bearer ${token}` } })
         ]);
       setProducts(productsRes.data || []);
       setCategories(categoriesRes.data || []);
@@ -74,7 +74,7 @@ export function Product() {
   const handleToggleActive = async (product: ProductType) => {
     try {
       const res: AxiosResponse<ProductType> = await axios.patch(
-        `https://kappee-backend-repo-11.onrender.com/api/products/${product._id}`,
+        `https://kappee-backend-repo-10.onrender.com/api/products/${product._id}`,
         { isActive: !product.isActive },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -103,11 +103,11 @@ export function Product() {
 
       let res: AxiosResponse<ProductType>;
       if (editingProduct) {
-        res = await axios.patch(`https://kappee-backend-repo-11.onrender.com/api/products/${editingProduct._id}`, dataToSend, { headers });
+        res = await axios.patch(`https://kappee-backend-repo-10.onrender.com/api/products/${editingProduct._id}`, dataToSend, { headers });
         setProducts(products.map((p) => (p._id === res.data._id ? res.data : p)));
         Notify.success("Product updated successfully");
       } else {
-        res = await axios.post("https://kappee-backend-repo-11.onrender.com/api/products", dataToSend, { headers });
+        res = await axios.post("https://kappee-backend-repo-10.onrender.com/api/products", dataToSend, { headers });
         setProducts([...products, res.data]);
         Notify.success("Product created successfully");
       }

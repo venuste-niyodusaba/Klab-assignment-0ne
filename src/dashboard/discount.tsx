@@ -27,7 +27,7 @@ export default function AdminDiscount() {
   const fetchDiscounts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get<DiscountType[]>("https://kappee-backend-repo-11.onrender.com/api/discounts", {
+      const res = await axios.get<DiscountType[]>("https://kappee-backend-repo-10.onrender.com/api/discounts", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDiscounts(res.data);
@@ -52,7 +52,7 @@ export default function AdminDiscount() {
 
     try {
       const res = await axios.post(
-        "https://kappee-backend-repo-11.onrender.com/api/discounts",
+        "https://kappee-backend-repo-10.onrender.com/api/discounts",
         newDiscount,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -70,7 +70,7 @@ export default function AdminDiscount() {
   const handleToggle = async (id: string) => {
     try {
       await axios.patch(
-        `https://kappee-backend-repo-11.onrender.com/api/discounts/${id}/toggle`,
+        `https://kappee-backend-repo-10.onrender.com/api/discounts/${id}/toggle`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

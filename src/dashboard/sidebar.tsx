@@ -24,7 +24,7 @@ export default function Sidebar() {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
       if (refreshToken) {
-        await axios.post("https://kappee-backend-repo-11.onrender.com/api/auth/logout", { refreshToken });
+        await axios.post("https://kappee-backend-repo-10.onrender.com/api/auth/logout", { refreshToken });
       }
     } catch (err) {
       console.error("Logout failed:", err);

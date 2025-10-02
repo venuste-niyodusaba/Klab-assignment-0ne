@@ -28,7 +28,7 @@ export function Customer() {
     }
 
     try {
-      const res = await axios.get<CustomerType[]>("https://kappee-backend-repo-11.onrender.com/api/users", {
+      const res = await axios.get<CustomerType[]>("https://kappee-backend-repo-10.onrender.com/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCustomers(res.data || []);
@@ -47,12 +47,12 @@ export function Customer() {
 
         try {
           const tokenRes = await axios.post<{ token: string }>(
-            "https://kappee-backend-repo-11.onrender.com/api/auth/refresh-token",
+            "https://kappee-backend-repo-10.onrender.com/api/auth/refresh-token",
             { token: refreshToken }
           );
           localStorage.setItem("token", tokenRes.data.token);
 
-          const retryRes = await axios.get<CustomerType[]>("https://kappee-backend-repo-11.onrender.com/api/users", {
+          const retryRes = await axios.get<CustomerType[]>("https://kappee-backend-repo-10.onrender.com/api/users", {
             headers: { Authorization: `Bearer ${tokenRes.data.token}` },
           });
           setCustomers(retryRes.data || []);

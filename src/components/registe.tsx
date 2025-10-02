@@ -28,7 +28,7 @@ function RegisterModal() {
         return;
       }
 
-      const response = await axios.post("http://localhost:5175/api/auth/signup", {
+      const response = await axios.post("https://kappee-backend-repo-10.onrender.com/api/auth/signup", {
         name: data.name, 
         email: data.email,
         password: data.password,

@@ -35,7 +35,7 @@ export default function Report() {
 
     try {
       const res = await axios.get<OrderType[]>(
-        "https://kappee-backend-repo-11.onrender.com/api/orders",
+        "https://kappee-backend-repo-10.onrender.com/api/orders",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOrders(res.data);
@@ -54,14 +54,14 @@ export default function Report() {
 
         try {
           const tokenRes = await axios.post<{ token: string }>(
-            "https://kappee-backend-repo-11.onrender.com/api/auth/refresh-token",
+            "https://kappee-backend-repo-10.onrender.com/api/auth/refresh-token",
             { token: refreshToken }
           );
           localStorage.setItem("token", tokenRes.data.token);
 
           // Retry original request with new token
           const retryRes = await axios.get<OrderType[]>(
-            "https://kappee-backend-repo-11.onrender.com/api/orders",
+            "https://kappee-backend-repo-10.onrender.com/api/orders",
             { headers: { Authorization: `Bearer ${tokenRes.data.token}` } }
           );
           setOrders(retryRes.data);
