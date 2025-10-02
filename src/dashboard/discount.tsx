@@ -59,6 +59,7 @@ export default function AdminDiscount() {
       Notify.success("Discount created!");
       setNewDiscount({ name: "", percentage: 0, startDate: "", endDate: "" });
       fetchDiscounts();
+      setDiscounts(res.data);
     } catch (err) {
       const axiosErr = err as AxiosError<{ message?: string }>;
       Notify.failure(axiosErr.response?.data?.message || "Failed to create discount");
