@@ -26,7 +26,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const { token, isAuthenticated } = useAuth();
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
-  const API_URL = "http://localhost:5175/api/wishlist"; 
+  const API_URL = "https://kappee-backend-repo-11.onrender.com/api/wishlist"; 
 
   const fetchWishlist = async () => {
     if (!isAuthenticated) {
