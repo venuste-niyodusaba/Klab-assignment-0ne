@@ -37,7 +37,7 @@ function LoginModal() {
   }, [resendTimer, step]);
   const onPasswordSubmit = async (data: FormData) => {
     try {
-      const res = await axios.post("http://localhost:5175/api/auth/login", {
+      const res = await axios.post("https://kappee-backend-repo-11.onrender.com/api/auth/login", {
         email: data.email,
         password: data.password,
       });
@@ -53,7 +53,7 @@ function LoginModal() {
   };
   const onOtpSubmit = async (data: FormData) => {
     try {
-      const res = await axios.post("http://localhost:5175/api/auth/login-verify", {
+      const res = await axios.post("https://kappee-backend-repo-11.onrender.com/api/auth/login-verify", {
         email: emailForOtp,
         otp: data.otp,
       });
@@ -72,7 +72,7 @@ function LoginModal() {
 
   const handleResendOtp = async () => {
     try {
-      await axios.post("http://localhost:5175/api/auth/login", { email: emailForOtp });
+      await axios.post("https://kappee-backend-repo-11.onrender.com/api/auth/login", { email: emailForOtp });
       Notify.success("OTP resent to your email");
       setResendTimer(60);
       setCanResend(false);

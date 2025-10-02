@@ -49,7 +49,7 @@ export default function Settings() {
     }
 
     try {
-      const res = await axios.get<UserSettings>("http://localhost:5175/api/user/settings", {
+      const res = await axios.get<UserSettings>("https://kappee-backend-repo-11.onrender.com/api/user/settings", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSettings(res.data);
@@ -67,12 +67,12 @@ export default function Settings() {
 
         try {
           const tokenRes = await axios.post<{ token: string }>(
-            "http://localhost:5175/api/auth/refresh-token",
+            "https://kappee-backend-repo-11.onrender.com/api/auth/refresh-token",
             { token: refreshToken }
           );
           localStorage.setItem("token", tokenRes.data.token);
 
-          const retryRes = await axios.get<UserSettings>("http://localhost:5175/api/user/settings", {
+          const retryRes = await axios.get<UserSettings>("https://kappee-backend-repo-11.onrender.com/api/user/settings", {
             headers: { Authorization: `Bearer ${tokenRes.data.token}` },
           });
           setSettings(retryRes.data);

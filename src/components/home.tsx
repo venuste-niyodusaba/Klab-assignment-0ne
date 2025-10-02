@@ -74,7 +74,7 @@ function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get<Product[]>("http://localhost:5175/api/products");
+        const res = await axios.get<Product[]>("https://kappee-backend-repo-11.onrender.com/api/products");
         setProducts(res.data);
       } catch (error) {
         console.error("Error fetching products:", error);
