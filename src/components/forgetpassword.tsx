@@ -18,7 +18,7 @@ function ForgotPassword() {
 
   const requestOtp = async (data: FormData) => {
     try {
-      const res = await axios.post("http://localhost:5175/api/password/request-reset", {
+      const res = await axios.post("https://kappee-backend-repo-10.onrender.com/api/password/request-reset", {
         email: data.email,
       });
       Notify.success(res.data.message || "OTP sent to your email");
@@ -31,7 +31,7 @@ function ForgotPassword() {
 
   const verifyOtp = async (data: FormData) => {
     try {
-      const res = await axios.post("http://localhost:5175/api/password/reset-password", {
+      const res = await axios.post("https://kappee-backend-repo-10.onrender.com/api/password/reset-password", {
         email: emailForOtp,
         otp: data.otp,
         newPassword: data.newPassword,
