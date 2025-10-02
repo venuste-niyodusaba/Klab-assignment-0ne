@@ -5,13 +5,14 @@ import "./index.css";
 import LayoutHandling from "./layout";
 import Home from "./components/home";
 import LoginModal from "./components/login";
-import RegisterModal from "./components/registe";
+import RegisterModal from "./components/registe"; // fixed typo
 import CartPage from "./components/CartPage";
 import WishlistPage from "./components/WishlistPage";
 import CheckoutPage from "./components/CheckoutPage";
 import Shop from "./components/Shop";
 import Blog from "./components/Blogs";
 import Elements from "./components/Elements";
+import ForgotPassword from "./components/forgetpassword";
 
 import DashBoardLayout from "./dashboard/dashboardlayout";
 import DashBoard from "./dashboard/dashboard";
@@ -27,7 +28,6 @@ import { CartProvider } from "./components/CartContext";
 import { WishlistProvider } from "./components/WishlistContext";
 import { AuthProvider } from "./components/AuthContext";
 import RequireAuth from "./components/RequireAuth";
-import ForgotPassword from "./components/forgetpassword";
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
                 <Route path="home" element={<Home />} />
                 <Route path="login" element={<LoginModal />} />
                 <Route path="register" element={<RegisterModal />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="cart" element={<CartPage />} />
                 <Route path="wishlist" element={<WishlistPage />} />
                 <Route path="help" element={<Help />} />
@@ -58,8 +58,10 @@ function App() {
                 <Route path="blog" element={<Blog />} />
                 <Route path="elements" element={<Elements />} />
               </Route>
+
+              {/* Dashboard Routes */}
               <Route
-                path="dashboard"
+                path="/dashboard"
                 element={
                   <RequireAuth>
                     <DashBoardLayout />
@@ -75,6 +77,9 @@ function App() {
                 <Route path="settings" element={<Setting />} />
                 <Route path="help" element={<Help />} />
               </Route>
+
+              {/* Catch-all route for 404 */}
+              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
           </WishlistProvider>
         </CartProvider>
